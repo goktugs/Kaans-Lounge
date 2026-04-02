@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentiment;
+
+service SentimentService {
+  rpc AnalyzeSentiment (AnalyzeSentimentRequest) returns (AnalyzeSentimentResponse);
+}
+
+message AnalyzeSentimentRequest {
+  string text = 1;
+  string textHash = 2;
+}
+
+message AnalyzeSentimentResponse {
+  string textHash = 1;
+  string sentiment = 2;
+  int32 processingDelayMs = 3;
+  bool cacheable = 4;
+}
