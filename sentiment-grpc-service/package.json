@@ -1,0 +1,21 @@
+{
+  "name": "sentiment-grpc-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/sentiment-grpc-service/src/index.js"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.14.0",
+    "@grpc/proto-loader": "^0.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  }
+}
