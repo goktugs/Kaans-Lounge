@@ -2,17 +2,11 @@ import {
   DEFAULT_KAFKA_BROKERS,
   DEFAULT_RAW_COMMENTS_TOPIC,
 } from "../../shared/constants/kafka";
+import type { ProducerConfig } from "./types/config";
 
 function readNumber(value: string | undefined, fallback: number): number {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : fallback;
-}
-
-export interface ProducerConfig {
-  kafkaBrokers: string[];
-  rawCommentsTopic: string;
-  generationMinMs: number;
-  generationMaxMs: number;
 }
 
 export function loadConfig(): ProducerConfig {
