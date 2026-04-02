@@ -2,6 +2,14 @@
 
 Real-time comment processing system for restaurant comments.
 
+## TEST VIDEOS
+  Rest Api
+https://github.com/user-attachments/assets/e01c54c6-b712-431e-a09b-7ed7de9092c9
+
+  Grpc Producer-Consumer
+https://github.com/user-attachments/assets/ea47549e-1481-44df-8af8-6668ee430400
+
+
 ## Overview
 
 The system is split into four services:
