@@ -1,0 +1,25 @@
+{
+  "name": "kaans-lounge",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "producer-service",
+    "consumer-service",
+    "sentiment-grpc-service",
+    "api-service"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "install:all": "npm install",
+    "build": "npm run build --workspaces",
+    "infra:up": "docker compose up -d",
+    "infra:down": "docker compose down",
+    "infra:reset": "docker compose down -v",
+    "start:grpc": "npm run start --workspace=sentiment-grpc-service",
+    "start:producer": "npm run start --workspace=producer-service",
+    "start:consumer": "npm run start --workspace=consumer-service",
+    "start:api": "npm run start --workspace=api-service"
+  }
+}
