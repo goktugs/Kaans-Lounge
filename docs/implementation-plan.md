@@ -32,13 +32,13 @@ Create services:
 
 ## Phase 3 — Infrastructure
 
-Setup Kafka, MongoDB, Redis with Docker Compose
+Setup Kafka (`KRaft`), MongoDB, Redis with Docker Compose
 
 ---
 
 ## Phase 4 — Shared Layer
 
-Define types, textHash utility, constants
+Define types, `textHash` utility, constants, shared contracts
 
 ---
 
@@ -85,7 +85,7 @@ Validate configs, schemas, topics
 
 ## Phase 10 — Finalization
 
-README, run instructions, test locally
+README, run instructions, Node.js 24 note, test locally
 
 ---
 
@@ -96,3 +96,4 @@ README, run instructions, test locally
 - Same textHash => same sentiment
 - Retry bounded
 - No infinite loops
+- Runtime target: Node.js 24
