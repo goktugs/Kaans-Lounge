@@ -5,6 +5,7 @@ import { DeduplicationStore } from "./deduplication-store";
 import { SentimentGrpcClient } from "./grpc-client";
 import { RawCommentsConsumer } from "./kafka-consumer";
 import { CommentProcessor } from "./processor";
+import { ProcessedCommentsProducer } from "./processed-comments-producer";
 
 const config = loadConfig();
 const cache = new SentimentCache(config.redisUrl);
@@ -12,6 +13,7 @@ const commentRepository = new CommentRepository(config.mongodbUri, config.mongod
 const deduplicationStore = new DeduplicationStore();
 const grpcClient = new SentimentGrpcClient(config.grpcSentimentHost);
 const rawCommentsConsumer = new RawCommentsConsumer(config);
+const processedCommentsProducer = new ProcessedCommentsProducer(config);
 const processor = new CommentProcessor({
   config,
   cache,
@@ -29,12 +31,14 @@ async function start(): Promise<void> {
   await cache.connect();
   await commentRepository.connect();
   await rawCommentsConsumer.connect();
+  await processedCommentsProducer.connect();
 
   console.log(
     JSON.stringify({
       level: "info",
       message: "Consumer service started",
       rawCommentsTopic: config.rawCommentsTopic,
+      processedCommentsTopic: config.processedCommentsTopic,
       kafkaBrokers: config.kafkaBrokers,
       redisUrl: config.redisUrl,
       mongodbUri: config.mongodbUri,
@@ -56,11 +60,12 @@ async function start(): Promise<void> {
     }
 
     await commentRepository.save(processedComment);
+    await processedCommentsProducer.publish(processedComment);
 
     console.log(
       JSON.stringify({
         level: "info",
-        message: "Comment processed and persisted",
+        message: "Comment processed, persisted, and published",
         commentId: processedComment.commentId,
         textHash: processedComment.textHash,
         status: processedComment.status,
@@ -73,6 +78,7 @@ async function start(): Promise<void> {
 
 async function shutdown(): Promise<void> {
   await rawCommentsConsumer.disconnect();
+  await processedCommentsProducer.disconnect();
   await commentRepository.disconnect();
   await cache.disconnect();
   process.exit(0);
