@@ -1,4 +1,5 @@
 import { SentimentCache } from "./cache";
+import { CommentRepository } from "./comment-repository";
 import { loadConfig } from "./config";
 import { DeduplicationStore } from "./deduplication-store";
 import { SentimentGrpcClient } from "./grpc-client";
@@ -7,6 +8,7 @@ import { CommentProcessor } from "./processor";
 
 const config = loadConfig();
 const cache = new SentimentCache(config.redisUrl);
+const commentRepository = new CommentRepository(config.mongodbUri, config.mongodbDatabase);
 const deduplicationStore = new DeduplicationStore();
 const grpcClient = new SentimentGrpcClient(config.grpcSentimentHost);
 const rawCommentsConsumer = new RawCommentsConsumer(config);
@@ -25,6 +27,7 @@ void start().catch((error) => {
 
 async function start(): Promise<void> {
   await cache.connect();
+  await commentRepository.connect();
   await rawCommentsConsumer.connect();
 
   console.log(
@@ -34,6 +37,8 @@ async function start(): Promise<void> {
       rawCommentsTopic: config.rawCommentsTopic,
       kafkaBrokers: config.kafkaBrokers,
       redisUrl: config.redisUrl,
+      mongodbUri: config.mongodbUri,
+      mongodbDatabase: config.mongodbDatabase,
       grpcSentimentHost: config.grpcSentimentHost,
       maxRetries: config.maxRetries,
       retryBackoffMs: config.retryBackoffMs,
@@ -50,10 +55,12 @@ async function start(): Promise<void> {
       return;
     }
 
+    await commentRepository.save(processedComment);
+
     console.log(
       JSON.stringify({
         level: "info",
-        message: "Comment processed",
+        message: "Comment processed and persisted",
         commentId: processedComment.commentId,
         textHash: processedComment.textHash,
         status: processedComment.status,
@@ -66,6 +73,7 @@ async function start(): Promise<void> {
 
 async function shutdown(): Promise<void> {
   await rawCommentsConsumer.disconnect();
+  await commentRepository.disconnect();
   await cache.disconnect();
   process.exit(0);
 }
