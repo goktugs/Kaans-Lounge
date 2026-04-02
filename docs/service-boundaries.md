@@ -26,7 +26,7 @@
 ## API Service
 
 - Reads processed comments from MongoDB
-- Exposes `GET /comments` and `GET /comments/:commentId`
+- Exposes `GET /api/v1/comments` and `GET /api/v1/comments/:commentId`
 - Does not read from Kafka directly
 
 ## Infrastructure Contracts

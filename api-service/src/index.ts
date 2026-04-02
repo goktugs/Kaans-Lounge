@@ -6,6 +6,7 @@ import { CommentsRepository } from "./comments-repository";
 const config = loadConfig();
 const repository = new CommentsRepository(config.mongodbUri, config.mongodbDatabase);
 const app = express();
+const apiV1 = express.Router();
 
 void start().catch((error) => {
   const message = (error as { message?: string }).message || "API service failed";
@@ -16,7 +17,7 @@ void start().catch((error) => {
 async function start(): Promise<void> {
   await repository.connect();
 
-  app.get("/comments", async (request, response) => {
+  apiV1.get("/comments", async (request, response) => {
     const page = clampPositiveInteger(request.query.page, 1);
     const limit = clampPositiveInteger(request.query.limit, 20, 100);
 
@@ -42,7 +43,7 @@ async function start(): Promise<void> {
     response.json(result);
   });
 
-  app.get("/comments/:commentId", async (request, response) => {
+  apiV1.get("/comments/:commentId", async (request, response) => {
     const comment = await repository.findByCommentId(request.params.commentId);
 
     if (!comment) {
@@ -69,12 +70,15 @@ async function start(): Promise<void> {
     response.json(comment);
   });
 
+  app.use("/api/v1", apiV1);
+
   const server = app.listen(config.port, () => {
     console.log(
       JSON.stringify({
         level: "info",
         message: "API service started",
         port: config.port,
+        basePath: "/api/v1",
         mongodbUri: config.mongodbUri,
         mongodbDatabase: config.mongodbDatabase,
       }),

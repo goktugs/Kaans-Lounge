@@ -247,37 +247,37 @@ db.processed_comments.find().pretty()
 List comments:
 
 ```bash
-curl http://localhost:3000/comments
+curl http://localhost:3000/api/v1/comments
 ```
 
 Paginated list:
 
 ```bash
-curl "http://localhost:3000/comments?page=1&limit=10"
+curl "http://localhost:3000/api/v1/comments?page=1&limit=10"
 ```
 
 Filter by status:
 
 ```bash
-curl "http://localhost:3000/comments?status=processed"
+curl "http://localhost:3000/api/v1/comments?status=processed"
 ```
 
 Filter by sentiment:
 
 ```bash
-curl "http://localhost:3000/comments?sentiment=positive"
+curl "http://localhost:3000/api/v1/comments?sentiment=positive"
 ```
 
 Filter by date:
 
 ```bash
-curl "http://localhost:3000/comments?from=2026-04-03T00:00:00.000Z&to=2026-04-03T23:59:59.999Z"
+curl "http://localhost:3000/api/v1/comments?from=2026-04-03T00:00:00.000Z&to=2026-04-03T23:59:59.999Z"
 ```
 
 Get one comment:
 
 ```bash
-curl http://localhost:3000/comments/<commentId>
+curl http://localhost:3000/api/v1/comments/<commentId>
 ```
 
 ## Notes

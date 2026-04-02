@@ -72,8 +72,8 @@ Process flow:
 
 Endpoints:
 
-- GET /comments
-- GET /comments/:commentId
+- GET /api/v1/comments
+- GET /api/v1/comments/:commentId
 
 ---
 
