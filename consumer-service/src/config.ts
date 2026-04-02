@@ -1,4 +1,8 @@
-import { DEFAULT_KAFKA_BROKERS, DEFAULT_RAW_COMMENTS_TOPIC } from "../../shared/constants/kafka";
+import {
+  DEFAULT_KAFKA_BROKERS,
+  DEFAULT_PROCESSED_COMMENTS_TOPIC,
+  DEFAULT_RAW_COMMENTS_TOPIC,
+} from "../../shared/constants/kafka";
 
 function readNumber(value: string | undefined, fallback: number): number {
   const parsed = Number(value);
@@ -8,6 +12,7 @@ function readNumber(value: string | undefined, fallback: number): number {
 export interface ConsumerConfig {
   kafkaBrokers: string[];
   rawCommentsTopic: string;
+  processedCommentsTopic: string;
   redisUrl: string;
   mongodbUri: string;
   mongodbDatabase: string;
@@ -23,6 +28,8 @@ export function loadConfig(): ConsumerConfig {
       .map((broker) => broker.trim())
       .filter(Boolean),
     rawCommentsTopic: process.env.RAW_COMMENTS_TOPIC || DEFAULT_RAW_COMMENTS_TOPIC,
+    processedCommentsTopic:
+      process.env.PROCESSED_COMMENTS_TOPIC || DEFAULT_PROCESSED_COMMENTS_TOPIC,
     redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
     mongodbUri: process.env.MONGODB_URI || "mongodb://localhost:27017/kaans-lounge",
     mongodbDatabase: process.env.MONGODB_DB || "kaans-lounge",
