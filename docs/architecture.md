@@ -1,4 +1,4 @@
-# Implementation Plan — Real-Time Comment Processing System
+# Architecture — Real-Time Comment Processing System
 
 ## Execution Protocol
 
@@ -28,6 +28,7 @@ Define the overall system structure before starting implementation.
 - Port plan
 - Kafka topic plan
 - Environment variable plan
+- Runtime baseline (`Node.js 24`)
 
 ### Important
 
@@ -81,8 +82,7 @@ Prepare the local development infrastructure.
 ### Deliverables
 
 - `docker-compose.yml`
-- Kafka
-- Zookeeper if required
+- Kafka in `KRaft` mode
 - MongoDB
 - Redis
 - Port mappings
@@ -202,15 +202,15 @@ Persist processed comment records in MongoDB.
 - Comment schema/model
 - Save processed comments
 - Ensure `commentId` uniqueness
-- Save:
-    - `commentId`
-    - `text`
-    - `textHash`
-    - `sentiment`
-    - `status`
-    - `createdAt`
-    - `analyzedAt`
-    - `retryCount`
+- Persist these fields:
+  - `commentId`
+  - `text`
+  - `textHash`
+  - `sentiment`
+  - `status`
+  - `createdAt`
+  - `analyzedAt`
+  - `retryCount`
 
 ### Important
 
@@ -258,13 +258,13 @@ Expose processed comments via REST API.
 - `GET /comments`
 - `GET /comments/:commentId`
 - Filtering:
-    - `sentiment`
-    - `status`
-    - `from`
-    - `to`
+  - `sentiment`
+  - `status`
+  - `from`
+  - `to`
 - Pagination:
-    - `page`
-    - `limit`
+  - `page`
+  - `limit`
 - Default sorting by `createdAt` descending
 - 404 behavior for missing `commentId`
 - Logging
@@ -318,6 +318,7 @@ Complete the final documentation.
 - Example API calls
 - Retry/failure explanation
 - Duplicate text handling explanation
+- Node.js version requirement (`24`)
 
 ### Stop condition
 
